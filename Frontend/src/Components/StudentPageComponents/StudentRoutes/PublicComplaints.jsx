@@ -48,7 +48,7 @@ const PublicComplaints = () => {
 
     return (
         <div style={{ padding: "20px" }}>
-            <Typography variant="h5" gutterBottom>User Complaints</Typography>
+            <Typography variant="h5" gutterBottom>Student Public Complaints</Typography>
 
             {loading ? (
                 <CircularProgress />

@@ -36,7 +36,7 @@ const StudentHero = () => {
     variant={isMobile ? "h5" : "h4"}
     sx={{ fontWeight: "bold", color: "#1565c0" }} // Softer primary color
   >
-    {greeting}, Student!
+    {greeting}, Board Member!
   </Typography>
   <Typography variant="body1" sx={{ mt: 1, color: "#616161" }}>
     What would you like to do today?

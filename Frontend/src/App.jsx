@@ -11,7 +11,8 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import ProfilePage from "./Pages/ProfilePage/ProfilePage";
 import StudentHome from "./Pages/StudentHome/StudentHome";
 import AdminHome from "./Pages/AdminHome/AdminHome";
-import DoctorHome from "./Pages/DoctorHome/DoctorHome";
+import BoardMemberRoutes from "./routes/AdminRoutes";
+// import DoctorHome from "./Pages/DoctorHome/DoctorHome";
 import { AuthProvider } from "./contexts/AuthContext";
 import UnauthorizedPage from "./Components/common/UnauthorizedPage";
 import StudentRoutes from "./routes/StudentRoutes";
@@ -59,6 +60,14 @@ const App = () => {
             element={
               <ProtectedRoute allowedRoles={["board-member"]}>
                 <AdminHome />{" "}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/board-member/*"
+            element={
+              <ProtectedRoute allowedRoles={["board-member"]}>
+                <BoardMemberRoutes />
               </ProtectedRoute>
             }
           />

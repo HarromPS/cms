@@ -4,13 +4,14 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 
 const API_BASE_URL = "http://localhost:8000/api/events";
 
-const MyComplaints = () => {
+const PublicComplaints = () => {
     const [complaints, setComplaints] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [error, setError] = useState(""); 
 
     useEffect(() => {
         const fetchComplaints = async () => {
+            console.log("hwh")
             try {
                 const token = localStorage.getItem("authToken");
                 if (!token) {
@@ -19,10 +20,7 @@ const MyComplaints = () => {
                     return;
                 }
 
-                const decoded = jwtDecode(token);
-                const userId = decoded.id; // Get user ID from token
-
-                const response = await fetch(`${API_BASE_URL}/get-user-complaints/${userId}`, {
+                const response = await fetch(`${API_BASE_URL}/get-flagged-complaints`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -30,6 +28,7 @@ const MyComplaints = () => {
                     },
                 });
 
+                console.log(response)
                 if (!response.ok) {
                     throw new Error("Failed to fetch complaints");
                 }
@@ -37,6 +36,7 @@ const MyComplaints = () => {
                 const data = await response.json();
                 setComplaints(data);
             } catch (err) {
+                console.log(err)
                 setError(err.message);
             } finally {
                 setLoading(false);
@@ -48,7 +48,7 @@ const MyComplaints = () => {
 
     return (
         <div style={{ padding: "20px" }}>
-            <Typography variant="h5" gutterBottom>Student Complaints</Typography>
+            <Typography variant="h5" gutterBottom>User InAppropriate Complaints</Typography>
 
             {loading ? (
                 <CircularProgress />
@@ -75,7 +75,7 @@ const MyComplaints = () => {
                                         <TableCell>{complaint.description}</TableCell>
                                         <TableCell>{complaint.category}</TableCell>
                                         <TableCell>{complaint.status}</TableCell>
-                                        <TableCell sx={{ color: complaint.moderation_status === "approved" ? "green" : "red" }}>{complaint.moderation_status}</TableCell>
+                                        <TableCell sx={{color:"red"}}>{complaint.moderation_status}</TableCell>
                                         <TableCell>{new Date(complaint.createdAt).toLocaleString()}</TableCell>
                                     </TableRow>
                                 ))
@@ -94,4 +94,4 @@ const MyComplaints = () => {
     );
 };
 
-export default MyComplaints;
+export default PublicComplaints;

@@ -42,7 +42,7 @@ const eventController = {
     try {
       const { id } = req.params;
       const status = "flagged";
-      const userComplaints = await Complaint.find({ id, status });
+      const userComplaints = await Complaint.find({status});
       if (userComplaints.length === 0) {
         return res.status(404).json({ message: "No Complaint Registered Yet!" });
       }

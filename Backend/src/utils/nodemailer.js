@@ -18,7 +18,7 @@ const sendOTP = async (email, otp) => {
       subject: "Your OTP for Registration",
       text: `Your OTP code is: ${otp}. It is valid for 5 minutes.`,
     });
-    console.log("OTP sent successfully to", email);
+    console.log("OTP sent successfully");
   } catch (error) {
     console.log("Error sending OTP:", error);
     throw error;

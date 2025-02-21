@@ -19,12 +19,14 @@ dbConnect();
 // Middleware to parse JSON
 app.use(express.json()); 
 // Allow requests from frontend
-app.use(cors({
-  origin: "http://localhost:5173", // Replace with frontend URL in production
-  methods: "GET,POST,PUT,DELETE",
-  allowedHeaders: "Content-Type,Authorization"
-}));
+// app.use(cors({
+//   origin: "http://localhost:5173", // Replace with frontend URL in production
+//   methods: "GET,POST,PUT,DELETE",
+//   allowedHeaders: "Content-Type,Authorization"
+// }));
 
+app.use(cors());
+app.options('*', cors()); // Enable preflight for all routes
 
 // Routes
 
@@ -52,7 +54,7 @@ app.get("/api/test", (req, res) => {
 
 // Default Route
 app.get("/", (req, res) => {
-  res.send("MongoDB Connected to Express!");
+  res.send("Welcome to backend!");
 });
 
 // After dbConnect();

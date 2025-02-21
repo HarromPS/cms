@@ -1,5 +1,5 @@
-const EventRequest = require("../models/EventRequestModel");
-const User = require("../models/UserModel");
+const EventRequest = require("../models/EventRequestModel.js");
+const User = require("../models/usermodel.js");
 
 /**
  * Event Controller

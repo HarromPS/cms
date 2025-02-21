@@ -1,10 +1,13 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/UserModel");
+const User = require("../models/usermodel.js");
 const sendOTP = require("../utils/nodemailer");
+const dotenv = require("dotenv");
+dotenv.config();
 
 // Generate random 6-digit OTP
-const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+const generateOTP = () =>
+  Math.floor(100000 + Math.random() * 900000).toString();
 
 // Step 1: Request OTP
 const requestOtp = async (req, res) => {
@@ -35,7 +38,8 @@ const requestOtp = async (req, res) => {
 const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
-    if (!email || !otp) return res.status(400).json({ message: "Email and OTP are required" });
+    if (!email || !otp)
+      return res.status(400).json({ message: "Email and OTP are required" });
     const user = await User.findOne({ email });
 
     if (!user || user.otp !== otp || new Date() > user.otpExpires) {
@@ -58,16 +62,18 @@ const verifyOtp = async (req, res) => {
 const register = async (req, res) => {
   try {
     const { email, password, role } = req.body;
-    
+
     // Validate role
-    const allowedRoles = ['student', 'student-coordinator'];
+    const allowedRoles = ["student", "board-member"];
     if (!allowedRoles.includes(role)) {
       return res.status(400).json({ message: "Invalid role selected" });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "Please complete OTP verification first" });
+      return res
+        .status(404)
+        .json({ message: "Please complete OTP verification first" });
     }
 
     if (!user.isVerified) {
@@ -79,14 +85,11 @@ const register = async (req, res) => {
     }
 
     // For coordinator role, add additional validation
-    if (role === 'student-coordinator') {
-      // You might want to add additional validation here
-      // For example, check if the email domain matches a specific pattern
-      // or if the user is in a specific year
-      const emailDomain = email.split('@')[1];
-      if (emailDomain !== 'sggs.ac.in') {
-        return res.status(400).json({ 
-          message: "Coordinator registration requires a valid college email" 
+    if (role === "board-member") {
+      const emailDomain = email.split("@")[1];
+      if (emailDomain !== "sggs.ac.in") {
+        return res.status(400).json({
+          message: `${role} registration requires a valid college email`,
         });
       }
     }
@@ -104,10 +107,10 @@ const register = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ 
-      message: "Registration successful", 
+    res.status(200).json({
+      message: "Registration successful",
       token,
-      role: user.role 
+      role: user.role,
     });
   } catch (err) {
     console.error("Registration error:", err);
@@ -119,14 +122,20 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    // console.log(req.body)
     const user = await User.findOne({ email });
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+    if (!isMatch)
+      return res.status(401).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({email: user.email, id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { email: user.email, id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     res.status(200).json({ message: "Logged in successfully", token });
   } catch (err) {

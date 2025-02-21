@@ -1,9 +1,17 @@
-import React from 'react'
+import React from "react";
+import Navbar from "../../Components/AdminPageComponents/Navbar/Navbar";
+import BoardMemberHero from "../../Components/AdminPageComponents/BoardMemberHero/BoardMemberHero";
+import styles from "./Home.module.css";
 
-const AdminHome = () => {
+const BoardMember = () => {
   return (
-    <div>AdminHome</div>
-  )
-}
+    <>
+      <Navbar />
+      <div className={styles.BoardMemberHome}>
+        <BoardMemberHero></BoardMemberHero>
+      </div>
+    </>
+  );
+};
 
-export default AdminHome
+export default BoardMember;

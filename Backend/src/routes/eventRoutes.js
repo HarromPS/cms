@@ -5,19 +5,19 @@ const verifyToken = require('../middleware/authMiddleware');
 const authorizeRoles = require('../middleware/roleMiddleware');
 
 // Get all complaints (filtered by role)
-router.get('/get-all-complaints/', 
+router.get('/get-all-complaints', 
   verifyToken, 
   eventController.getAllComplaints
 );
 
 // Get approved complaints (filtered by role)
-router.get('/get-approved-complaints/', 
+router.get('/get-approved-complaints', 
   verifyToken, 
   eventController.getApprovedComplaints
 );
 
 // Get flagged complaints (filtered by role)
-router.get('/get-flagged-complaints/', 
+router.get('/get-flagged-complaints', 
   verifyToken, 
   eventController.getFlaggedComplaints
 );

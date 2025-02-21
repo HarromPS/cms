@@ -30,7 +30,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  console.log(user)
+  // console.log(user)
   // Toggle handlers
   const toggleMobileDrawer = () => setMobileOpen(!mobileOpen);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);

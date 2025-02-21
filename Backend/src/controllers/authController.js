@@ -104,7 +104,7 @@ const register = async (req, res) => {
     const token = jwt.sign(
       { email: user.email, id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "2d" }
     );
 
     res.status(200).json({

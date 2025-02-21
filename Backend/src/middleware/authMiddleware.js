@@ -10,6 +10,7 @@ const verifyToken = (req, res, next) => {
     
     if(authHeader && authHeader.startsWith("Bearer")) {
         token = authHeader.split(" ")[1];
+        // console.log(token);
 
         if(!token) {
             return res.status(401).json({ message: "Unauthorized" });
@@ -18,7 +19,7 @@ const verifyToken = (req, res, next) => {
         try {
             const decode = jwt.verify(token, process.env.JWT_SECRET);
             req.user = decode;
-            console.log("the decoded user is : ", req.user)
+            // console.log("the decoded user is : ", req.user)
             next();
         } catch (err) {
             res.status(400).json({ message: "Token is not valid" });

@@ -1,5 +1,7 @@
 const EventRequest = require("../models/EventRequestModel.js");
 const User = require("../models/usermodel.js");
+const Complaint = require("../models/complaintModel.js");
+const moderation = require("../utils/moderation.js");
 
 /**
  * Event Controller
@@ -7,15 +9,21 @@ const User = require("../models/usermodel.js");
  */
 const eventController = {
   // Create new event request
-  createRequest: async (req, res) => {
+  getAllComplaints: async (req, res) => {
     try {
-      const { eventName, eventType, date, venue, description, expectedAttendees, budget, organizerContact } = req.body;
-      
+      const { 
+        title,
+        description,
+        category,
+        status,
+        submitted_by,
+        moderation_status,
+
+      } = req.body;
+
       // Verify user is a student coordinator
-      const coordinator = await User.findById(req.user.id);
-      if (coordinator.role !== 'student-coordinator') {
-        return res.status(403).json({ message: 'Only student coordinators can create event requests' });
-      }
+      const coordinator = await Complaint.find({});
+      
 
       const eventRequest = new EventRequest({
         eventName,
@@ -37,7 +45,7 @@ const eventController = {
   },
 
   // Get all events (with optional filters)
-  getEvents: async (req, res) => {
+  getApprovedComplaints: async (req, res) => {
     try {
       const { status, type } = req.query;
       let query = {};
@@ -62,7 +70,7 @@ const eventController = {
   },
 
   // Update event request status (admin only)
-  updateEventStatus: async (req, res) => {
+  getFlaggedComplaints: async (req, res) => {
     try {
       const { eventId } = req.params;
       const { status, adminComments } = req.body;
@@ -88,17 +96,54 @@ const eventController = {
   },
 
   // Get event details by ID
-  getEventById: async (req, res) => {
+  getUserComplaints: async (req, res) => {
     try {
-      const { eventId } = req.params;
-      const event = await EventRequest.findById(eventId)
-        .populate('coordinatorId', 'email');
-
-      if (!event) {
-        return res.status(404).json({ message: 'Event not found' });
+      const { userId } = req.params;
+      const userComplaints = await Complaint.find({userId});
+      if (userComplaints.length === 0) {
+        return res.status(404).json({ message: "No Complaint Registered Yet!" });
       }
 
-      res.status(200).json(event);
+      res.status(200).json(userComplaints);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching event details', error: error.message });
+    }
+  },
+
+  // Get event details by ID
+  RegisterComplaint: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { 
+        title,
+        description,
+        category,
+        status,
+        submitted_by,
+        moderation_status,
+
+      } = req.body;
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const checkAppropriateComplaint = moderation(description);
+      moderation_status = checkAppropriateComplaint?"approved":"flagged";
+      status = checkAppropriateComplaint?"public":"flagged";
+
+      const newComplaint = new Complaint({
+        title,
+        description,
+        category,
+        status,
+        submitted_by,
+        moderation_status,
+      });
+      
+      await newComplaint.save();
+      res.status(200).json({"msg":"success"});
     } catch (error) {
       res.status(500).json({ message: 'Error fetching event details', error: error.message });
     }

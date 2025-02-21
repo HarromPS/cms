@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
     title: { type: String },
     description: { type: String },
     category: { type: String },
-    category: { type: String },
+    status: { type: String },
     submitted_by: { type: String },
     moderation_status: { type: String },
   },

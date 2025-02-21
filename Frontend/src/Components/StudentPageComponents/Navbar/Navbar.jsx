@@ -134,7 +134,7 @@ const Navbar = () => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              Campus Management
+              Student Dashboard
             </Typography>
           </Box>
 

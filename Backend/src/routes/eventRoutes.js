@@ -35,4 +35,18 @@ router.post('/register-complaint/:id',
   eventController.RegisterComplaint
 );
 
+// modify a complaint
+router.put('/modify-complaint', 
+  verifyToken, 
+  authorizeRoles('board-member'), 
+  eventController.ModifyComplaint
+);
+
+// delete a complaint
+router.delete('/delete-complaint/:id', 
+  verifyToken, 
+  authorizeRoles('board-member'), 
+  eventController.DeleteComplaint
+);
+
 module.exports = router; 

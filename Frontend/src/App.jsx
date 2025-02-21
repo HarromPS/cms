@@ -6,14 +6,14 @@ import {
   Navigate,
 } from "react-router-dom";
 import Home from "./Pages/Home/Home";
-import LoginSignupPage from "./Pages/LoginSignupPage.jsx/LoginSignupPage";
+import LoginSignupPage from "./Pages/LoginSignupPages/LoginSignupPage";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import ProfilePage from "./Pages/ProfilePage/ProfilePage";
 import StudentHome from "./Pages/StudentHome/StudentHome";
 import AdminHome from "./Pages/AdminHome/AdminHome";
 import DoctorHome from "./Pages/DoctorHome/DoctorHome";
 import { AuthProvider } from "./contexts/AuthContext";
-import UnauthorizedPage from "./components/common/UnauthorizedPage";
+import UnauthorizedPage from "./Components/common/UnauthorizedPage";
 import StudentRoutes from "./routes/StudentRoutes";
 
 // Remove or comment out these imports until you create the components
@@ -31,55 +31,38 @@ const App = () => {
           <Route
             path="/"
             element={
-              <ProtectedRoute allowedRoles={["student", "doctor", "admin"]}>
+              <ProtectedRoute allowedRoles={["student", "board-member"]}>
                 <Home />
-              </ProtectedRoute>
-            }
-          />
-          {/* <Route
-            path="/election/*"
-            element={
-              <ProtectedRoute allowedRoles={["student", "admin"]}>
-                <ElectionRoutes />
-              </ProtectedRoute>
-            }
-          /> */}
-          <Route
-            path="/student/*"
-            element={
-              <ProtectedRoute allowedRoles={["student", "admin"]}>
-                <StudentRoutes />
               </ProtectedRoute>
             }
           />
           <Route
             path="/student"
             element={
-              <ProtectedRoute allowedRoles={["student", "admin"]}>
+              <ProtectedRoute allowedRoles={["student"]}>
                 <StudentHome />{" "}
-                {/* Only accessible if the user is authenticated */}
               </ProtectedRoute>
             }
           />
 
           <Route
-            path="/admin"
+            path="/student/*"
             element={
-              <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminHome />{" "}
-                {/* Only accessible if the user is authenticated */}
+              <ProtectedRoute allowedRoles={["student"]}>
+                <StudentRoutes />
               </ProtectedRoute>
             }
           />
+
           <Route
-            path="/doctor"
+            path="/board-member"
             element={
-              <ProtectedRoute allowedRoles={["doctor", "admin"]}>
-                <DoctorHome />{" "}
-                {/* Only accessible if the user is authenticated */}
+              <ProtectedRoute allowedRoles={["board-member"]}>
+                <AdminHome />{" "}
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/profile"
             element={

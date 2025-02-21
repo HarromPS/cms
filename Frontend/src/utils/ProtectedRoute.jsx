@@ -18,6 +18,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
     try {
       const user = jwtDecode(token);
+      // console.log(user);
 
       // 🎯 Role check
       if (allowedRoles && !allowedRoles.includes(user.role)) {

@@ -4,7 +4,6 @@ import { jwtDecode } from "jwt-decode";
 import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 import SquareLoader from "../../Components/Loader/SquareLoader/SquareLoader";
 
-
 const Home = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -13,13 +12,13 @@ const Home = () => {
 
   useEffect(() => {
     // Test API connection
-    fetch('http://localhost:5000/api/test')
-      .then(res => res.json())
-      .then(data => {
+    fetch("http://localhost:5000/api/test")
+      .then((res) => res.json())
+      .then((data) => {
         setApiStatus(data);
         console.log("API Status:", data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("API Connection Error:", err);
         setApiStatus({ status: "error", message: err.message });
       });
@@ -28,7 +27,6 @@ const Home = () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       navigate("/login");
-      navigate("/login");
       return;
     }
 
@@ -36,7 +34,13 @@ const Home = () => {
       const decoded = jwtDecode(token);
       setUser(decoded);
 
-      if (decoded.role === "student") navigate("/student");
+      if (decoded.role === "student"){
+        
+        navigate("/student");
+      }
+      if (decoded.role === "board-member") {
+        navigate("/board-member");
+      }
     } catch (error) {
       console.error("Invalid token:", error);
       localStorage.removeItem("authToken");
@@ -52,10 +56,20 @@ const Home = () => {
   if (!user || loading) return <SquareLoader />;
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+    >
       <Card sx={{ width: 400, padding: 3, textAlign: "center", boxShadow: 3 }}>
         <CardContent>
-          <Typography variant="h5" fontWeight="bold" color="primary" gutterBottom>
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color="primary"
+            gutterBottom
+          >
             Welcome, {user.email || "User"}!
           </Typography>
           <Typography variant="body1" sx={{ mb: 1 }}>
@@ -65,6 +79,7 @@ const Home = () => {
             User ID: {user.id}
           </Typography>
 
+          {/*
           <Box display="flex" flexDirection="column" gap={1.5}>
             {user.role === "doctor" && (
               <Button
@@ -113,6 +128,8 @@ const Home = () => {
               Home
             </Button>
           </Box>
+
+           */}
         </CardContent>
       </Card>
     </Box>

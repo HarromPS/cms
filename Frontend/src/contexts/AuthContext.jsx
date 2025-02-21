@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext(null);
 
+const API_BASE_URL = "http://localhost:8000/api/auth";
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const token = localStorage.getItem('authToken');
         if (token) {
-          const response = await fetch('http://localhost:5000/api/users/user', {
+          const response = await fetch(`${API_BASE_URL}`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }

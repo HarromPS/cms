@@ -18,35 +18,51 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { motion } from "framer-motion";
 import styles from "./Navbar.module.css";
 import AddIcon from "@mui/icons-material/Add";
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from "../../../contexts/AuthContext";
 
 // Drawer width for desktop view
 const drawerWidth = 240;
 
 const Navbar = () => {
   // State and hooks
-  const [mobileOpen, setMobileOpen] = useState(false);  // Mobile drawer state
+  const [mobileOpen, setMobileOpen] = useState(false); // Mobile drawer state
   const [sidebarOpen, setSidebarOpen] = useState(true); // Desktop sidebar state
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  console.log(user)
+  console.log(user);
   // Toggle handlers
   const toggleMobileDrawer = () => setMobileOpen(!mobileOpen);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   // Navigation menu items with role-based access
   const menuItems = [
-    { text: "Dashboard", path: "/student" },
-    { text: "My Complaints", path: "/student/my-complaints" },
-    { text: "Register Complaint", path: "/student/register-complaint" },
-    { text: "Public Complaints", path: "/student/public-complaints" },
-    { text: "Logout", path: "/student/logout" },
+    {
+      roles: ["student", "admin", "faculty"],
+      text: "Dashboard",
+      path: "/student",
+    },
+    {
+      roles: ["student", "admin", "faculty"],
+      text: "My Complaints",
+      path: "/student/my-complaints",
+    },
+    {
+      roles: ["student", "admin", "faculty"],
+      text: "Register Complaint",
+      path: "/student/register-complaint",
+    },
+    {
+      roles: ["student", "admin", "faculty"],
+      text: "Public Complaints",
+      path: "/student/public-complaints",
+    },
+    {
+      roles: ["student", "admin", "faculty"],
+      text: "Flagged Complaints",
+      path: "/student/public-complaints",
+    },
 
-
-    // { text: "Event Request", path: "/student/event-request" },
-    // { text: "Sick Leave", path: "/student/sick-leave" },
-    // { text: "Facility Booking", path: "/student/facility-booking" },
     // { text: "Event Requests", path: "/student/event-requests" },
     // { text: "Complaints", path: "/student/complaints" },
     // { text: "Budget Tracker", path: "/student/budget-tracking" },
@@ -54,11 +70,9 @@ const Navbar = () => {
   ];
 
   // Filter menu items based on user role
-  // const filteredMenuItems = menuItems.filter(item => 
-  //   !item.roles || item.roles.includes(user?.role)
-  // );
-
-  const filteredMenuItems = menuItems;
+  const filteredMenuItems = menuItems.filter(
+    (item) => !item.roles || item.roles.includes(user?.role)
+  );
 
   // Drawer content component
   const drawerContent = (
@@ -122,9 +136,9 @@ const Navbar = () => {
           borderBottom: "1px solid #e0e0e0",
         }}
       >
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           {/* Left side - Title and mobile menu */}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <IconButton
               color="inherit"
               edge="start"
@@ -139,11 +153,11 @@ const Navbar = () => {
           </Box>
 
           {/* Right side - Action Buttons */}
-          {user?.role === 'student-coordinator' && (
-            <Button 
+          {user?.role === "student-coordinator" && (
+            <Button
               color="primary"
               variant="contained"
-              onClick={() => navigate('/student/event-request')}
+              onClick={() => navigate("/student/event-request")}
               startIcon={<AddIcon />}
               sx={{ ml: 2 }}
             >
